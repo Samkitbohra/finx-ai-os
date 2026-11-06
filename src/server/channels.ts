@@ -51,7 +51,7 @@ export async function send(channel: Channel, to: { phone: string; email?: string
         const r = await fetch(process.env.VOICE_PROVIDER_URL!, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.VOICE_PROVIDER_KEY ?? ''}` },
-          body: JSON.stringify({ to: `+${e164(to.phone)}`, name: to.name, language: msg.language, script: msg.text, ref: msg.callbackRef, callback_url: `${process.env.APP_URL}/api/webhooks/voice` }),
+          body: JSON.stringify({ to: `+${e164(to.phone)}`, name: to.name, language: msg.language, script: msg.text, ref: msg.callbackRef, callback_url: `${process.env.APP_URL || process.env.URL}/api/webhooks/voice` }),
         });
         const j = await r.json().catch(() => ({}));
         return { ok: r.ok, provider: 'voice_http', providerRef: j?.id ?? j?.call_id, error: r.ok ? undefined : JSON.stringify(j), simulated: false };

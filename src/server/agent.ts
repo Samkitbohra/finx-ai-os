@@ -119,7 +119,7 @@ export async function contactBorrower(ctx: Ctx, loanId: string, channel: Channel
     name: b.name.split(' ')[0], lender: org.name, loanNo: fmtNo.loan(loan.loanNo), product: product.name.toLowerCase(),
     amount: fmtP(amount), dueDate: fmtDate(dues?.dueNow ? todayIST() : dues?.nextDue?.date ?? todayIST()), dpd: String(loan.dpd),
     rate: `${Number(loan.annualRate)}% ${loan.interestMethod === 'FLAT' ? 'flat' : 'reducing'}`, outstanding: fmtP(toPaise(loan.outstandingPrincipal)),
-    payLink: `${process.env.APP_URL ?? ''}/app/pay/${loan.id}`, date: fmtDate(todayIST()),
+    payLink: `${(process.env.APP_URL || process.env.URL || '')}/app/pay/${loan.id}`, date: fmtDate(todayIST()),
     nextLine: dues?.nextDue ? `Your next payment of ${fmtP(dues.nextDue.amount)} is due on ${fmtDate(dues.nextDue.date)}.` : '', ...opts.extra,
   };
   const text = render(tpl.body, vars);
