@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens match the FinX website: deep navy, electric blue, high-contrast text (WCAG AA). */
+:root, [data-theme='dark'] {
+  --bg: 7 11 22;
+  --panel: 12 18 34;
+  --raised: 18 26 46;
+  --line: 32 44 70;
+  --ink: 237 243 251;
+  --dim: 179 195 217;
+  --mute: 133 151 179;
+  --brand: 59 130 246;
+  --good: 52 211 153;
+  --warn: 251 191 36;
+  --bad: 248 113 113;
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  --bg: 244 246 251;
+  --panel: 255 255 255;
+  --raised: 248 250 253;
+  --line: 222 228 239;
+  --ink: 13 20 38;
+  --dim: 64 78 104;
+  --mute: 104 118 145;
+  --brand: 37 99 235;
+  --good: 5 150 105;
+  --warn: 180 120 0;
+  --bad: 220 38 38;
+  color-scheme: light;
+}
+
+html, body { background: rgb(var(--bg)); color: rgb(var(--ink)); }
+body { font-feature-settings: 'cv11', 'ss01', 'tnum'; -webkit-font-smoothing: antialiased; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Soft blue bloom behind the console, as on the website */
+.bloom { background: radial-gradient(1200px 500px at 70% -10%, rgb(var(--brand) / .14), transparent 60%), radial-gradient(800px 400px at -10% 110%, rgb(var(--brand) / .08), transparent 60%); }
+.grad { background: linear-gradient(90deg, #8ab4ff, #3b82f6 45%, #7dd3fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+@layer components {
+  .card { @apply rounded-2xl border border-line bg-panel; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-brand text-white hover:brightness-110; }
+  .btn-ghost { @apply btn border border-line bg-raised text-ink hover:border-brand/60; }
+  .btn-danger { @apply btn border border-bad/40 bg-bad/10 text-bad hover:bg-bad/20; }
+  .input { @apply w-full rounded-xl border border-line bg-raised px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30; }
+  .label { @apply mb-1 block text-xs font-medium uppercase tracking-wider text-mute; }
+  .th { @apply px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-mute; }
+  .td { @apply px-4 py-3 text-sm; }
+  .tr { @apply border-t border-line/70 hover:bg-raised/60; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold; }
+  .tab { @apply rounded-lg px-3 py-1.5 text-sm text-dim hover:text-ink; }
+  .tab-on { @apply bg-raised text-ink ring-1 ring-line; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; color: black; }
+  .card { border-color: #ddd; background: white; }
+}
+
+/* grid children may shrink below their content width (prevents horizontal page overflow) */
+.grid > * { min-width: 0; }
