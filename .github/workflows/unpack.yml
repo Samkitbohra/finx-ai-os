@@ -1,0 +1,19 @@
+name: Unpack code
+on:
+  push:
+    paths: ['finx-ai-os.zip']
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          unzip -oq finx-ai-os.zip
+          git rm -q finx-ai-os.zip .github/workflows/unpack.yml
+          git config user.name "Samkit Bohra"
+          git config user.email "bohrasamkit@gmail.com"
+          git add -A
+          git commit -m "Add FinX AI OS source"
+          git push
