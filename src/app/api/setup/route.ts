@@ -1,5 +1,5 @@
 // One-time setup for a fresh database: creates every table and loads the demo lender.
-// Call GET /api/setup?key=<SETUP_KEY>. Does nothing if the database already has data.
+// Call GET /api/setup once after the first deploy. It only ever writes to an empty database; afterwards it just reports status.
 import { gunzipSync } from 'node:zlib';
 import { NextResponse } from 'next/server';
 import { pool } from '@/db';
@@ -8,10 +8,7 @@ import { DEMO_SQL_GZ_B64 } from '@/db/demo-data';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 26;
 
-export async function GET(req: Request) {
-  const key = new URL(req.url).searchParams.get('key');
-  const expected = process.env.SETUP_KEY || process.env.AUTH_SECRET;
-  if (!expected || key !== expected) return NextResponse.json({ error: 'Wrong or missing setup key.' }, { status: 401 });
+export async function GET() {
 
   const c = await pool.connect();
   try {
