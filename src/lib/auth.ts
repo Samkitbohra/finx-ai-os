@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -8,7 +9,8 @@ import { can, Action, Forbidden, ORG_WIDE } from './permissions';
 
 const COOKIE = 'finx_session';
 const BORROWER_COOKIE = 'finx_borrower';
-const secret = () => new TextEncoder().encode(process.env.AUTH_SECRET || 'dev-only-secret-change-me');
+// Without AUTH_SECRET, derive one from the (private) database URL so a fresh deploy is still signed securely.
+const secret = () => new TextEncoder().encode(process.env.AUTH_SECRET || createHash('sha256').update('finx:' + (process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL || 'dev-only-secret-change-me')).digest('hex'));
 
 export interface Ctx {
   orgId: string;
